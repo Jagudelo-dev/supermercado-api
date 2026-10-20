@@ -43,6 +43,45 @@ public class ProductoService {
         return productoMapper.toResponse(obtenerProducto(id));
     }
 
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> listarPorCategoria(Long categoriaId) {
+        if (categoriaId == null) {
+            throw new ReglaNegocioException("El id de categoría es obligatorio");
+        }
+        if (!categoriaRepository.existsById(categoriaId)) {
+            throw new RecursoNoEncontradoException(
+                    "Categoría no encontrada con id: " + categoriaId);
+        }
+        return productoRepository.findByCategoriaId(categoriaId).stream()
+                .map(productoMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> buscarPorNombre(String nombre) {
+        if (nombre == null || nombre.isBlank()) {
+            throw new ReglaNegocioException(
+                    "El parámetro 'nombre' es obligatorio y no puede estar vacío");
+        }
+        return productoRepository.findByNombreContainingIgnoreCase(nombre).stream()
+                .map(productoMapper::toResponse)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ProductoResponseDTO> listarStockBajo(Integer limite) {
+        if (limite == null) {
+            throw new ReglaNegocioException("El parámetro 'limite' es obligatorio");
+        }
+        if (limite < 0) {
+            throw new ReglaNegocioException(
+                    "El límite debe ser mayor o igual a cero");
+        }
+        return productoRepository.findByStockLessThanEqual(limite).stream()
+                .map(productoMapper::toResponse)
+                .toList();
+    }
+
     @Transactional
     public ProductoResponseDTO crear(ProductoRequestDTO dto) {
         if (productoRepository.existsByCodigoBarras(dto.getCodigoBarras())) {

@@ -37,6 +37,14 @@ public class ClienteService {
         return clienteMapper.toResponse(obtenerCliente(id));
     }
 
+    @Transactional(readOnly = true)
+    public ClienteResponseDTO buscarPorDocumento(String documento) {
+        return clienteRepository.findByDocumento(documento)
+                .map(clienteMapper::toResponse)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Cliente no encontrado con documento: " + documento));
+    }
+
     @Transactional
     public ClienteResponseDTO crear(ClienteRequestDTO dto) {
         if (clienteRepository.existsByDocumento(dto.getDocumento())) {

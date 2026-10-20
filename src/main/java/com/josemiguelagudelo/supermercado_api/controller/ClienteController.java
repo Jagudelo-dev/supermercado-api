@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +37,12 @@ public class ClienteController {
     @GetMapping("/{id}")
     public ResponseEntity<ClienteResponseDTO> buscarPorId(@PathVariable Long id) {
         return ResponseEntity.ok(clienteService.buscarPorId(id));
+    }
+
+    @GetMapping("/documento/{documento}")
+    public ResponseEntity<ClienteResponseDTO> buscarPorDocumento(
+            @PathVariable String documento) {
+        return ResponseEntity.ok(clienteService.buscarPorDocumento(documento));
     }
 
     @PostMapping

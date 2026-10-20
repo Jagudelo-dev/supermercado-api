@@ -37,9 +37,6 @@ public class Producto {
     @Column(name = "nombre", nullable = false, length = 100)
     private String nombre;
 
-    @Column(name = "descripcion", length = 255)
-    private String descripcion;
-
     @Column(name = "codigo_barras", nullable = false, unique = true, length = 50)
     private String codigoBarras;
 

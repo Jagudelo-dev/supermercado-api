@@ -4,6 +4,8 @@ import com.josemiguelagudelo.supermercado_api.entity.Producto;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * Repositorio JPA para la entidad Producto.
  */
@@ -17,4 +19,10 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     boolean existsByCategoria_Id(Long categoriaId);
 
     boolean existsByProveedor_Id(Long proveedorId);
+
+    List<Producto> findByCategoriaId(Long categoriaId);
+
+    List<Producto> findByNombreContainingIgnoreCase(String nombre);
+
+    List<Producto> findByStockLessThanEqual(Integer limite);
 }

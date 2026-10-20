@@ -15,7 +15,6 @@ public class ProductoMapper {
         return ProductoResponseDTO.builder()
                 .id(entidad.getId())
                 .nombre(entidad.getNombre())
-                .descripcion(entidad.getDescripcion())
                 .codigoBarras(entidad.getCodigoBarras())
                 .precio(entidad.getPrecio())
                 .stock(entidad.getStock())
@@ -28,7 +27,6 @@ public class ProductoMapper {
 
     public void updateEntityFromRequest(ProductoRequestDTO dto, Producto entidad) {
         entidad.setNombre(dto.getNombre());
-        entidad.setDescripcion(dto.getDescripcion());
         entidad.setCodigoBarras(dto.getCodigoBarras());
         entidad.setPrecio(dto.getPrecio());
         entidad.setStock(dto.getStock());

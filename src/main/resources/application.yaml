@@ -2,6 +2,10 @@ spring:
   application:
     name: supermercado-api
 
+  sql:
+    init:
+      mode: never
+
   # ===== Base de datos H2 en memoria =====
   datasource:
     url: jdbc:h2:mem:supermercado;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
