@@ -6,6 +6,7 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -26,6 +27,16 @@ public class ManejadorGlobalExcepciones {
         cuerpo.put("error", "No encontrado");
         cuerpo.put("mensaje", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(cuerpo);
+    }
+
+    @ExceptionHandler(ReglaNegocioException.class)
+    public ResponseEntity<Map<String, Object>> manejarReglaNegocio(ReglaNegocioException ex) {
+        Map<String, Object> cuerpo = new HashMap<>();
+        cuerpo.put("timestamp", LocalDateTime.now());
+        cuerpo.put("status", HttpStatus.CONFLICT.value());
+        cuerpo.put("error", "Conflicto");
+        cuerpo.put("mensaje", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(cuerpo);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -50,6 +61,16 @@ public class ManejadorGlobalExcepciones {
         cuerpo.put("status", HttpStatus.BAD_REQUEST.value());
         cuerpo.put("error", "Solicitud inválida");
         cuerpo.put("mensaje", "El cuerpo de la petición no es un JSON válido o no coincide con la estructura esperada");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cuerpo);
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Map<String, Object>> manejarTipoIncorrecto(MethodArgumentTypeMismatchException ex) {
+        Map<String, Object> cuerpo = new HashMap<>();
+        cuerpo.put("timestamp", LocalDateTime.now());
+        cuerpo.put("status", HttpStatus.BAD_REQUEST.value());
+        cuerpo.put("error", "Solicitud inválida");
+        cuerpo.put("mensaje", "El valor enviado para '" + ex.getName() + "' no tiene el formato esperado");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(cuerpo);
     }
 }

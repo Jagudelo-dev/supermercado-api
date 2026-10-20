@@ -2,20 +2,13 @@ package com.josemiguelagudelo.supermercado_api.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+
 
 /**
  * DTO de entrada para crear o actualizar una categoría.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Data 
 public class CategoriaRequestDTO {
 
     @NotBlank(message = "El nombre es obligatorio")

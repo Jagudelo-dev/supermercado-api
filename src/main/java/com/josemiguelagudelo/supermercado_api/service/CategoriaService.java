@@ -4,8 +4,10 @@ import com.josemiguelagudelo.supermercado_api.dto.CategoriaRequestDTO;
 import com.josemiguelagudelo.supermercado_api.dto.CategoriaResponseDTO;
 import com.josemiguelagudelo.supermercado_api.entity.Categoria;
 import com.josemiguelagudelo.supermercado_api.exception.RecursoNoEncontradoException;
+import com.josemiguelagudelo.supermercado_api.exception.ReglaNegocioException;
 import com.josemiguelagudelo.supermercado_api.mapper.CategoriaMapper;
 import com.josemiguelagudelo.supermercado_api.repository.CategoriaRepository;
+import com.josemiguelagudelo.supermercado_api.repository.ProductoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +24,7 @@ public class CategoriaService {
 
     private final CategoriaRepository categoriaRepository;
     private final CategoriaMapper categoriaMapper;
+    private final ProductoRepository productoRepository;
 
     @Transactional(readOnly = true)
     public List<CategoriaResponseDTO> listar() {
@@ -58,9 +61,12 @@ public class CategoriaService {
 
     @Transactional
     public void eliminar(Long id) {
-        if (!categoriaRepository.existsById(id)) {
-            throw new RecursoNoEncontradoException(
-                    "Categoría no encontrada con id: " + id);
+        categoriaRepository.findById(id)
+                .orElseThrow(() -> new RecursoNoEncontradoException(
+                        "Categoría no encontrada con id: " + id));
+        if (productoRepository.existsByCategoria_Id(id)) {
+            throw new ReglaNegocioException(
+                    "No se puede eliminar: la categoría tiene productos asociados");
         }
         categoriaRepository.deleteById(id);
     }

@@ -1,3 +1,35 @@
 spring:
   application:
     name: supermercado-api
+
+  # ===== Base de datos H2 en memoria =====
+  datasource:
+    url: jdbc:h2:mem:supermercado;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+
+  # ===== JPA / Hibernate =====
+  jpa:
+    hibernate:
+      ddl-auto: update          # Crea/actualiza tablas al arrancar (ideal dev)
+    show-sql: true              # Muestra el SQL generado en consola
+    properties:
+      hibernate:
+        format_sql: true        # SQL legible con saltos de línea
+    open-in-view: false         # Buena práctica: no mantener sesión abierta en la vista
+
+  # ===== Consola web de H2  =====
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+
+# ===== Servidor =====
+server:
+  port: 8080
+
+# ===== Logging =====
+logging:
+  level:
+    org.hibernate.SQL: DEBUG    # Para ver las queries que Hibernate lanza
